@@ -50,7 +50,6 @@ void ScreensaverWindow::initialize(ScreensaverProvider *ptr)
     listView->setShowDelete(false);
     mainLayout->addWidget(listView);
 
-    mainLayout->addSpacing(10);
     customBtn = new CustomButton(this);
     customBtn->setEnabled(false);
     mainLayout->addWidget(customBtn);
@@ -64,7 +63,7 @@ void ScreensaverWindow::initialize(ScreensaverProvider *ptr)
 
     mainLayout->addWidget(idle);
 
-    auto vSpaceItem = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
+    auto vSpaceItem = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding);
     mainLayout->addSpacerItem(vSpaceItem);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,

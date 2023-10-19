@@ -20,8 +20,8 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
 void PreviewWidget::updateSize()
 {
-    // 高耗时
     pixmap = QPixmap();
+    // 高耗时
     QPixmap pix(imgPath);
     if (pix.isNull())
         return;

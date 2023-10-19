@@ -70,8 +70,6 @@ void WallpaperWindow::initialize(WallpaperProvider *ptr)
     listView->setContextMenuPolicy(Qt::CustomContextMenu);
     mainLayout->addWidget(listView);
 
-    mainLayout->addSpacing(15);
-
     //screen
     screenBox = new ScreenComBox;
     mainLayout->addWidget(screenBox);
@@ -80,7 +78,7 @@ void WallpaperWindow::initialize(WallpaperProvider *ptr)
     intervalCombox = new IntervalCombox;
     mainLayout->addWidget(intervalCombox);
 
-    auto vSpaceItem = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
+    auto vSpaceItem = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding);
     mainLayout->addSpacerItem(vSpaceItem);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,

@@ -24,9 +24,14 @@ public:
     void initialize();
     ItemModel *itemModel() const;
     void setShowDelete(bool enable);
+    bool hasHeightForWidth() const override;
+    int heightForWidth(int) const override;
+public slots:
+    void updateMaxHeight();
 protected:
     void updateButton(const QModelIndex &index);
     bool viewportEvent(QEvent *event) override;
+    bool event(QEvent *e) override;
 signals:
     void deleteButtonClicked(const ItemNodePtr &ptr);
     void itemClicked(const ItemNodePtr &ptr);
@@ -34,6 +39,7 @@ protected slots:
     void onItemClicked(const QModelIndex &index);
     void onButtonClicked();
     void onItemRemoved(const QModelIndex &parent, int first, int last);
+    void updateMargins();
 private:
     ItemDelegate *delegate = nullptr;
     bool enableDelete = false;
