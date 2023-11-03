@@ -249,7 +249,7 @@ void WallpaperWindow::getNewWallpaper()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select Wallpaper"),
                                                       QStandardPaths::locate(QStandardPaths::PicturesLocation, ""),
-                                                      tr("Images") + QString(" (*.png *.jpg)"));
+                                                      tr("Images") + QString(" (*.png *.jpg *.tiff *.gif *.bmp)"));
     if (fileName.isEmpty())
         return;
 
@@ -266,7 +266,7 @@ void WallpaperWindow::getNewWallpaper()
 void WallpaperWindow::getNewColor()
 {
     //show palete
-    ColorDialog dlg;
+    ColorDialog dlg(this);
     dlg.setColor(dlg.palette().color(QPalette::Highlight));
     if (dlg.exec() == QDialog::Rejected)
         return;
