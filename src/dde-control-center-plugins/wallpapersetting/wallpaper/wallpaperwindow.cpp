@@ -249,7 +249,7 @@ void WallpaperWindow::getNewWallpaper()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select Wallpaper"),
                                                       QStandardPaths::locate(QStandardPaths::PicturesLocation, ""),
-                                                      tr("Images") + QString(" (*.png *.jpg *.tiff *.gif *.bmp)"));
+                                                      tr("Images") + QString(" (*.png *.jpg *.jpeg *.tiff *.gif *.bmp)"));
     if (fileName.isEmpty())
         return;
 
