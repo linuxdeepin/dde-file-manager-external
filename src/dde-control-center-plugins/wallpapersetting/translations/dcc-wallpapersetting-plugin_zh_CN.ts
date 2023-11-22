@@ -198,19 +198,24 @@
 <context>
     <name>dfm_wallpapersetting::WallpaperWindow</name>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="215"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="250"/>
         <source>Select Wallpaper</source>
         <translation>选择壁纸</translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="217"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="252"/>
         <source>Images</source>
         <translation>图片</translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="327"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="367"/>
         <source>Set to lock screen</source>
         <translation>设置锁屏</translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="397"/>
+        <source>This system wallpaper is locked. Please contact your admin.</source>
+        <translation>当前系统壁纸已被锁定，请联系管理员</translation>
     </message>
 </context>
 </TS>

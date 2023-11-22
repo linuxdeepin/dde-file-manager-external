@@ -164,12 +164,12 @@
     <message>
         <location filename="../screensaversettingplugin.cpp" line="106"/>
         <source>Custom Screensaver</source>
-        <translation type="unfinished"></translation>
+        <translation>Custom Screensaver</translation>
     </message>
     <message>
         <location filename="../screensaversettingplugin.cpp" line="107"/>
         <source>Idle Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Idle Time</translation>
     </message>
 </context>
 <context>
@@ -182,34 +182,39 @@
     <message>
         <location filename="../wallpapersettingplugin.cpp" line="107"/>
         <source>Wallpaper Slideshow</source>
-        <translation type="unfinished"></translation>
+        <translation>Wallpaper Slideshow</translation>
     </message>
     <message>
         <location filename="../wallpapersettingplugin.cpp" line="108"/>
         <source>Picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Picture</translation>
     </message>
     <message>
         <location filename="../wallpapersettingplugin.cpp" line="109"/>
         <source>Solid Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Solid Color</translation>
     </message>
 </context>
 <context>
     <name>dfm_wallpapersetting::WallpaperWindow</name>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="215"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="250"/>
         <source>Select Wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="217"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="252"/>
         <source>Images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="327"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="367"/>
         <source>Set to lock screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="397"/>
+        <source>This system wallpaper is locked. Please contact your admin.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

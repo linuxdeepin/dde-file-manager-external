@@ -198,19 +198,24 @@
 <context>
     <name>dfm_wallpapersetting::WallpaperWindow</name>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="215"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="250"/>
         <source>Select Wallpaper</source>
         <translation>Select Wallpaper</translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="217"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="252"/>
         <source>Images</source>
         <translation>Images</translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="327"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="367"/>
         <source>Set to lock screen</source>
         <translation>Set to lock screen</translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="397"/>
+        <source>This system wallpaper is locked. Please contact your admin.</source>
+        <translation>This system wallpaper is locked. Please contact your admin.</translation>
     </message>
 </context>
 </TS>

@@ -291,6 +291,11 @@ void WallpaperWindow::getNewColor()
 
 void WallpaperWindow::setWallpaper(const QString &path)
 {
+    if (isWallpaperLocked()) {
+        qDebug() << "wallpaper is locked..";
+        return;
+    }
+
     provider->setBackgroundForMonitor(currentScreen, path);
 }
 
@@ -360,7 +365,7 @@ void WallpaperWindow::onViewMenu(const QPoint &pos)
 
     QMenu menu;
     auto ac = menu.addAction(tr("Set to lock screen"));
-    if (menu.exec(listView->mapToGlobal(pos)) == ac) {
+    if (menu.exec(listView->viewport()->mapToGlobal(pos)) == ac) {
         provider->setBackgroundToGreeter(ptr->item);
     }
 }
@@ -379,4 +384,24 @@ ItemNodePtr WallpaperWindow::createAddButton() const
     ItemNodePtr btn(new ItemNode{NEW_ITEM_KEY, icon.pixmap(LISTVIEW_ICON_WIDTH, LISTVIEW_ICON_HEIGHT),
                                  palette().color(backgroundRole()), false, false});
     return btn;
+}
+
+bool WallpaperWindow::isWallpaperLocked() const
+{
+    if (QFileInfo::exists("/var/lib/deepin/permission-manager/wallpaper_locked")) {
+        static uint notifyID = 0;
+        QDBusInterface notify("org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications");
+        notify.setTimeout(1000);
+        QDBusPendingReply<uint> p = notify.asyncCall(QString("Notify"),
+                         QString("dde-control-center"),   // title
+                         notifyID,
+                         QString("notification-wallpaper-lock"),   // icon
+                         tr("This system wallpaper is locked. Please contact your admin."),
+                         QString(), QStringList(), QVariantMap(), 5000);
+
+        notifyID = p.value() > 0 ? p.value() : 0;
+        return true;
+    }
+
+    return false;
 }

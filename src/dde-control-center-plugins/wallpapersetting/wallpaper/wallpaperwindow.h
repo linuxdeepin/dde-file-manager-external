@@ -41,6 +41,7 @@ protected:
     void getNewWallpaper();
     void getNewColor();
     void setWallpaper(const QString &path);
+    bool isWallpaperLocked() const;
 protected slots:
     void itemClicked(const ItemNodePtr &ptr);
     void previewItem(const QString &item, const QColor &bkg);
