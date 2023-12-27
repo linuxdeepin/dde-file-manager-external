@@ -25,7 +25,7 @@ static constexpr char kDefaultWallpaperPath[] = "/usr/share/backgrounds/default_
 
 WallpaperWindow::WallpaperWindow(QWidget *parent) : QWidget(parent)
 {
-
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 WallpaperWindow::~WallpaperWindow()

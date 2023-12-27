@@ -12,7 +12,7 @@ using namespace dfm_wallpapersetting;
 
 ScreensaverWindow::ScreensaverWindow(QWidget *parent) : QWidget(parent)
 {
-
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 ScreensaverWindow::~ScreensaverWindow()
