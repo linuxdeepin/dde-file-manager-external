@@ -29,7 +29,7 @@ FILE (GLOB_RECURSE SCREENSAVER_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/screensaver/*.cpp"
 )
 
-find_package(Qt5 COMPONENTS Core Widgets DBus LinguistTools REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets DBus Concurrent LinguistTools REQUIRED)
 find_package(DdeControlCenter REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus )
