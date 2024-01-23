@@ -6,29 +6,60 @@
 #define PREVIEWWIDGET_H
 
 #include <QWidget>
+#include <QFuture>
+#include <QWaitCondition>
+#include <QThread>
 
 namespace dfm_wallpapersetting {
+
+class PixmapProducer : public QThread
+{
+    Q_OBJECT
+public:
+    struct PixmapInfo
+    {
+        QString path;
+        QSize size;
+        qreal ratio;
+    };
+    explicit PixmapProducer(QObject *parent);
+    void append(const PixmapInfo &);
+    void stop();
+    void launch();
+protected:
+    void run() override;
+protected:
+    volatile bool running = false;
+    QList<PixmapInfo> infos;
+    QWaitCondition cond;
+    QMutex condMtx;
+};
 
 class PreviewWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit PreviewWidget(QWidget *parent = nullptr);
-    void updateSize();
+    ~PreviewWidget();
+    void updateImage();
     void setImage(const QString &img);
     void setBackground(const QColor &color);
     void setBoder(const QColor &color);
 protected:
-    QPixmap scaledPixmap(const QPixmap &pixmap) const;
+    QSize imageSize() const;
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
-public slots:
+private slots:
+    void setPixmap(QPixmap pix);
 protected:
     QString imgPath;
     QPixmap pixmap;
     QColor bkgColor;
     QColor bdColor;
+private:
+    PixmapProducer *worker = nullptr;
+    QSize curSize;
 };
 
 }
