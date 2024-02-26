@@ -37,6 +37,20 @@ pkg_check_modules(DtkGui REQUIRED dtkgui )
 pkg_check_modules(DtkWidget REQUIRED dtkwidget )
 pkg_check_modules(QGSet REQUIRED gsettings-qt)
 
+include_directories(
+    ${DFrameworkDBus_INCLUDE_DIRS}
+    ${DdeControlCenter_INCLUDE_DIR}
+    ${DtkGui_INCLUDE_DIRS}
+    ${DtkWidget_INCLUDE_DIRS}
+    )
+# link_libraries 需在 add_library 前设置
+link_libraries(
+    ${DFrameworkDBus_LIBRARIES}
+    ${DtkWidget_LIBRARIES}
+    ${DtkGui_LIBRARIES}
+    ${DdeControlCenter_LIBRARIES}
+)
+
 add_library(${WALLPAPER_NAME} SHARED
     ${WALLPAPER_SRC}
     ${COMMON_SRC}
@@ -52,19 +66,6 @@ add_library(${SCREENSAVER_NAME} SHARED
     )
 
 #set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../)
-include_directories(
-    ${DFrameworkDBus_INCLUDE_DIRS}
-    ${DdeControlCenter_INCLUDE_DIR}
-    ${DtkGui_INCLUDE_DIRS}
-    ${DtkWidget_INCLUDE_DIRS}
-    )
-
-link_libraries(
-    ${DFrameworkDBus_LIBRARIES}
-    ${DtkWidget_LIBRARIES}
-    ${DtkGui_LIBRARIES}
-    ${DdeControlCenter_LIBRARIES}
-)
 
 target_include_directories(${SCREENSAVER_NAME} PRIVATE
     ${QGSet_INCLUDE_DIRS}
