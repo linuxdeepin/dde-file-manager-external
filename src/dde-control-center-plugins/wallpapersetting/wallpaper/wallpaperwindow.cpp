@@ -314,6 +314,7 @@ void WallpaperWindow::itemClicked(const ItemNodePtr &ptr)
         auto old = provider->getBackgroundForMonitor(currentScreen);
         if (old != ptr->item) {
             setWallpaper(ptr->item);
+            provider->setBackgroundToGreeter(ptr->item);
         }
     }
 }
@@ -364,9 +365,13 @@ void WallpaperWindow::onViewMenu(const QPoint &pos)
         return;
 
     QMenu menu;
-    auto ac = menu.addAction(tr("Set to lock screen"));
-    if (menu.exec(listView->viewport()->mapToGlobal(pos)) == ac) {
+    auto ac1 = menu.addAction(tr("Set to lock screen"));
+    auto ac2 = menu.addAction(tr("Set to desktop"));
+    auto ac = menu.exec(listView->viewport()->mapToGlobal(pos));
+    if (ac == ac1) {
         provider->setBackgroundToGreeter(ptr->item);
+    } else if (ac == ac2) {
+        setWallpaper(ptr->item);
     }
 }
 
