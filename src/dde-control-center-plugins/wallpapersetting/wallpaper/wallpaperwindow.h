@@ -40,7 +40,7 @@ signals:
 protected:
     void getNewWallpaper();
     void getNewColor();
-    void setWallpaper(const QString &path);
+    void setWallpaper(const QString &path, bool isGreeter = true);
     bool isWallpaperLocked() const;
 protected slots:
     void itemClicked(const ItemNodePtr &ptr);
