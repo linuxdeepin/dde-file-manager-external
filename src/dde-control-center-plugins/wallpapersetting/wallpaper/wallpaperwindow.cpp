@@ -289,7 +289,7 @@ void WallpaperWindow::getNewColor()
     setWallpaper(SOLID_PREFIX + file.fileName());
 }
 
-void WallpaperWindow::setWallpaper(const QString &path)
+void WallpaperWindow::setWallpaper(const QString &path, bool isGreeter)
 {
     if (isWallpaperLocked()) {
         qDebug() << "wallpaper is locked..";
@@ -297,6 +297,8 @@ void WallpaperWindow::setWallpaper(const QString &path)
     }
 
     provider->setBackgroundForMonitor(currentScreen, path);
+    if (isGreeter)
+        provider->setBackgroundToGreeter(path);
 }
 
 void WallpaperWindow::itemClicked(const ItemNodePtr &ptr)
@@ -314,7 +316,6 @@ void WallpaperWindow::itemClicked(const ItemNodePtr &ptr)
         auto old = provider->getBackgroundForMonitor(currentScreen);
         if (old != ptr->item) {
             setWallpaper(ptr->item);
-            provider->setBackgroundToGreeter(ptr->item);
         }
     }
 }
@@ -371,7 +372,7 @@ void WallpaperWindow::onViewMenu(const QPoint &pos)
     if (ac == ac1) {
         provider->setBackgroundToGreeter(ptr->item);
     } else if (ac == ac2) {
-        setWallpaper(ptr->item);
+        setWallpaper(ptr->item, false);
     }
 }
 
