@@ -278,6 +278,7 @@ void WallpaperWindow::getNewColor()
     QImage img(1920, 1080, QImage::Format_ARGB32);
     img.fill(color);
     QTemporaryFile file(path);
+    file.setAutoRemove(false); // 将临时文件设置为不自动删除
     if (!file.open()) {
         qWarning() << "fail to save image" << file.fileName();
         return;
