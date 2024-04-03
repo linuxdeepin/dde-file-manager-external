@@ -1,3 +1,9 @@
+dde-file-manager-external (1.0.5) unstable; urgency=medium
+
+  * update file manager external version to V1.0.5
+
+ -- liujinchang <liujinchang@uniontech.com>  Wed, 3  Apr 16:14:03 2024 +0800
+
 dde-file-manager-external (1.0.4) unstable; urgency=medium
 
   * update file manager external version to V1.0.4
