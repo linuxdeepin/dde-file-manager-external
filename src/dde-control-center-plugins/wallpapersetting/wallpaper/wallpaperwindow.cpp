@@ -75,6 +75,7 @@ void WallpaperWindow::initialize(WallpaperProvider *ptr)
     mainLayout->addWidget(screenBox);
     screenBox->reset();
 
+    mainLayout->addSpacing(5);
     intervalCombox = new IntervalCombox;
     mainLayout->addWidget(intervalCombox);
 
