@@ -22,6 +22,8 @@
         <location filename="../screensaver/custombutton.cpp" line="20"/>
         <source>Custom Screensaver</source>
         <translation>自定义屏保</translation>
+        <extra-child_page>ScreensaverSetting</extra-child_page>
+        <extra-contents_path>/personalization/ScreensaverSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../screensaver/custombutton.cpp" line="24"/>
@@ -35,6 +37,8 @@
         <location filename="../screensaver/idletime.cpp" line="30"/>
         <source>Idle Time</source>
         <translation>闲置时间</translation>
+        <extra-child_page>ScreensaverSetting</extra-child_page>
+        <extra-contents_path>/personalization/ScreensaverSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../screensaver/idletime.cpp" line="33"/>
@@ -72,7 +76,9 @@
     <message>
         <location filename="../wallpaper/intervalcombox.cpp" line="15"/>
         <source>Wallpaper Slideshow</source>
-        <translation>自动更换壁纸</translation>
+        <translation>自动更换壁纸</translation>        
+        <extra-child_page>WallpaperSetting</extra-child_page>
+        <extra-contents_path>/personalization/WallpaperSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../wallpaper/intervalcombox.cpp" line="68"/>
@@ -116,11 +122,15 @@
         <location filename="../wallpaper/modebuttonbox.cpp" line="20"/>
         <source>Picture</source>
         <translation>图片壁纸</translation>
+        <extra-child_page>WallpaperSetting</extra-child_page>
+        <extra-contents_path>/personalization/WallpaperSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../wallpaper/modebuttonbox.cpp" line="24"/>
         <source>Solid Color</source>
         <translation>纯色壁纸</translation>
+        <extra-child_page>WallpaperSetting</extra-child_page>
+        <extra-contents_path>/personalization/WallpaperSetting</extra-contents_path>
     </message>
 </context>
 <context>
@@ -154,7 +164,7 @@
     <message>
         <location filename="../screensaversettingplugin.cpp" line="106"/>
         <source>Custom Screensaver</source>
-        <translation>个性化屏保</translation>
+        <translation>自定义屏保</translation>
     </message>
     <message>
         <location filename="../screensaversettingplugin.cpp" line="107"/>

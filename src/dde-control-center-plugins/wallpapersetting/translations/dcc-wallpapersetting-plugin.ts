@@ -22,6 +22,8 @@
         <location filename="../screensaver/custombutton.cpp" line="20"/>
         <source>Custom Screensaver</source>
         <translation>Custom Screensaver</translation>
+        <extra-child_page>ScreensaverSetting</extra-child_page>
+        <extra-contents_path>/personalization/ScreensaverSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../screensaver/custombutton.cpp" line="24"/>
@@ -35,6 +37,8 @@
         <location filename="../screensaver/idletime.cpp" line="30"/>
         <source>Idle Time</source>
         <translation>Idle Time</translation>
+        <extra-child_page>ScreensaverSetting</extra-child_page>
+        <extra-contents_path>/personalization/ScreensaverSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../screensaver/idletime.cpp" line="33"/>
@@ -73,6 +77,8 @@
         <location filename="../wallpaper/intervalcombox.cpp" line="15"/>
         <source>Wallpaper Slideshow</source>
         <translation>Wallpaper Slideshow</translation>
+        <extra-child_page>WallpaperSetting</extra-child_page>
+        <extra-contents_path>/personalization/WallpaperSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../wallpaper/intervalcombox.cpp" line="68"/>
@@ -116,11 +122,15 @@
         <location filename="../wallpaper/modebuttonbox.cpp" line="20"/>
         <source>Picture</source>
         <translation>Picture</translation>
+        <extra-child_page>WallpaperSetting</extra-child_page>
+        <extra-contents_path>/personalization/WallpaperSetting</extra-contents_path>
     </message>
     <message>
         <location filename="../wallpaper/modebuttonbox.cpp" line="24"/>
         <source>Solid Color</source>
         <translation>Solid Color</translation>
+        <extra-child_page>WallpaperSetting</extra-child_page>
+        <extra-contents_path>/personalization/WallpaperSetting</extra-contents_path>
     </message>
 </context>
 <context>
