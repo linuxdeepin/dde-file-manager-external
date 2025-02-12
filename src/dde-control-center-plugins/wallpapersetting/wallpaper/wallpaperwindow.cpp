@@ -6,6 +6,7 @@
 #include "wallpaperprovider.h"
 #include "docksketch.h"
 #include "colordialog.h"
+#include "fillstylescombox.h"
 
 #include <DGuiApplicationHelper>
 
@@ -23,7 +24,8 @@ using namespace dfm_wallpapersetting;
 
 static constexpr char kDefaultWallpaperPath[] = "/usr/share/backgrounds/default_background.jpg";
 
-WallpaperWindow::WallpaperWindow(QWidget *parent) : QWidget(parent)
+WallpaperWindow::WallpaperWindow(QWidget *parent)
+    : QWidget(parent)
 {
     setFocusPolicy(Qt::ClickFocus);
 }
@@ -79,6 +81,10 @@ void WallpaperWindow::initialize(WallpaperProvider *ptr)
     intervalCombox = new IntervalCombox;
     mainLayout->addWidget(intervalCombox);
 
+    mainLayout->addSpacing(5);
+    fillstylesCombox = new FillstylesCombox;
+    mainLayout->addWidget(fillstylesCombox);
+
     auto vSpaceItem = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding);
     mainLayout->addSpacerItem(vSpaceItem);
 
@@ -113,6 +119,7 @@ void WallpaperWindow::reset(QString screen, int mode)
 
     currentScreen = screen;
     intervalCombox->reset(screen);
+    fillstylesCombox->reset(screen, mode);
     screenBox->setCurrentScreen(screen);
 
     // current wallpaper
@@ -249,8 +256,8 @@ void WallpaperWindow::onThmeChanged()
 void WallpaperWindow::getNewWallpaper()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select Wallpaper"),
-                                                      QStandardPaths::locate(QStandardPaths::PicturesLocation, ""),
-                                                      tr("Images") + QString(" (*.png *.jpg *.jpeg *.tiff *.gif *.bmp)"));
+                                                    QStandardPaths::locate(QStandardPaths::PicturesLocation, ""),
+                                                    tr("Images") + QString(" (*.png *.jpg *.jpeg *.tiff *.gif *.bmp)"));
     if (fileName.isEmpty())
         return;
 
@@ -272,14 +279,12 @@ void WallpaperWindow::getNewColor()
     if (dlg.exec() == QDialog::Rejected)
         return;
     auto color = dlg.color();
-    QString path = QDir::tempPath() + QString("/XXXXXX-solid-color-%0%1%2.jpg").arg(QString::number(color.red(), 16))
-                                                          .arg(QString::number(color.green(), 16))
-                                                          .arg(QString::number(color.blue(), 16));
+    QString path = QDir::tempPath() + QString("/XXXXXX-solid-color-%0%1%2.jpg").arg(QString::number(color.red(), 16)).arg(QString::number(color.green(), 16)).arg(QString::number(color.blue(), 16));
     // create img
     QImage img(1920, 1080, QImage::Format_ARGB32);
     img.fill(color);
     QTemporaryFile file(path);
-    file.setAutoRemove(false); // 将临时文件设置为不自动删除
+    file.setAutoRemove(false);   // 将临时文件设置为不自动删除
     if (!file.open()) {
         qWarning() << "fail to save image" << file.fileName();
         return;
@@ -389,8 +394,8 @@ void WallpaperWindow::repaintItem(const QString &it)
 ItemNodePtr WallpaperWindow::createAddButton() const
 {
     QIcon icon = QIcon::fromTheme(isPictureMode() ? "dfm-add-wallpaper" : "dfm-select-color");
-    ItemNodePtr btn(new ItemNode{NEW_ITEM_KEY, icon.pixmap(LISTVIEW_ICON_WIDTH, LISTVIEW_ICON_HEIGHT),
-                                 palette().color(backgroundRole()), false, false});
+    ItemNodePtr btn(new ItemNode { NEW_ITEM_KEY, icon.pixmap(LISTVIEW_ICON_WIDTH, LISTVIEW_ICON_HEIGHT),
+                                   palette().color(backgroundRole()), false, false });
     return btn;
 }
 
@@ -401,11 +406,11 @@ bool WallpaperWindow::isWallpaperLocked() const
         QDBusInterface notify("org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications");
         notify.setTimeout(1000);
         QDBusPendingReply<uint> p = notify.asyncCall(QString("Notify"),
-                         QString("dde-control-center"),   // title
-                         notifyID,
-                         QString("notification-wallpaper-lock"),   // icon
-                         tr("This system wallpaper is locked. Please contact your admin."),
-                         QString(), QStringList(), QVariantMap(), 5000);
+                                                     QString("dde-control-center"),   // title
+                                                     notifyID,
+                                                     QString("notification-wallpaper-lock"),   // icon
+                                                     tr("This system wallpaper is locked. Please contact your admin."),
+                                                     QString(), QStringList(), QVariantMap(), 5000);
 
         notifyID = p.value() > 0 ? p.value() : 0;
         return true;

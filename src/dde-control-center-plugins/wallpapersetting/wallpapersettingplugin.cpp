@@ -105,6 +105,7 @@ void WallpaperSettingPlugin::initSearchData()
 
     // wallpaper setting widget
     m_frameProxy->setDetailVisible(module, displayName(), tr("Wallpaper Slideshow"), true);
+    m_frameProxy->setDetailVisible(module, displayName(), tr("Fill Style"), true);
     m_frameProxy->setDetailVisible(module, displayName(), tr("Picture"), true);
     m_frameProxy->setDetailVisible(module, displayName(), tr("Solid Color"), true);
 

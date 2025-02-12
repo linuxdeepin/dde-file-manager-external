@@ -11,6 +11,7 @@
 #include "common/listview.h"
 #include "common/itemmodel.h"
 #include "screencombox.h"
+#include "fillstylescombox.h"
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -58,6 +59,7 @@ private:
     PreviewWidget *preview = nullptr;
     ModeButtonBox *modeBox = nullptr;
     IntervalCombox *intervalCombox = nullptr;
+    FillstylesCombox *fillstylesCombox = nullptr;
     ListView *listView = nullptr;
     ItemModel *itemModel = nullptr;
     ScreenComBox *screenBox = nullptr;
