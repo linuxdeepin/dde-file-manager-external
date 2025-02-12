@@ -32,6 +32,39 @@
     </message>
 </context>
 <context>
+    <name>dfm_wallpapersetting::FillstylesCombox</name>
+    <message>
+        <location filename="../wallpaper/fillstylescombox.cpp" line="20"/>
+        <source>Fill Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/fillstylescombox.cpp" line="23"/>
+        <source>Fill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/fillstylescombox.cpp" line="24"/>
+        <source>Fit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/fillstylescombox.cpp" line="25"/>
+        <source>Stretch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/fillstylescombox.cpp" line="26"/>
+        <source>Tile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpaper/fillstylescombox.cpp" line="27"/>
+        <source>Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>dfm_wallpapersetting::IdleTime</name>
     <message>
         <location filename="../screensaver/idletime.cpp" line="30"/>
@@ -186,11 +219,16 @@
     </message>
     <message>
         <location filename="../wallpapersettingplugin.cpp" line="108"/>
+        <source>Fill Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wallpapersettingplugin.cpp" line="109"/>
         <source>Picture</source>
         <translation>Picture</translation>
     </message>
     <message>
-        <location filename="../wallpapersettingplugin.cpp" line="109"/>
+        <location filename="../wallpapersettingplugin.cpp" line="110"/>
         <source>Solid Color</source>
         <translation>Solid Color</translation>
     </message>
@@ -198,27 +236,27 @@
 <context>
     <name>dfm_wallpapersetting::WallpaperWindow</name>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="250"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="258"/>
         <source>Select Wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="252"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="260"/>
         <source>Images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="368"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="376"/>
         <source>Set to lock screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="369"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="377"/>
         <source>Set to desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wallpaper/wallpaperwindow.cpp" line="404"/>
+        <location filename="../wallpaper/wallpaperwindow.cpp" line="412"/>
         <source>This system wallpaper is locked. Please contact your admin.</source>
         <translation type="unfinished"></translation>
     </message>
