@@ -32,6 +32,7 @@ IdleTime::IdleTime(QWidget *parent) : QWidget(parent)
 
     pwdCheck = new QCheckBox(tr("Require a password on wakeup"), bkg);
     pwdCheck->setFixedHeight(combox->height());
+    pwdCheck->setStyleSheet("QCheckBox { padding-left: 10px; }");
     bgGpLayout->addWidget(pwdCheck);
 
     connect(pwdCheck, &QCheckBox::clicked, this, &IdleTime::setIsLock);
