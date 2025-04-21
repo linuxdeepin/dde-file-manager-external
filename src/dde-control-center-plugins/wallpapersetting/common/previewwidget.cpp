@@ -18,6 +18,13 @@ PixmapProducer::PixmapProducer(QObject *parent) : QThread(parent)
     Q_ASSERT(parent);
 }
 
+PixmapProducer::~PixmapProducer()
+{
+    // 确保线程停止并等待完成
+    stop();
+    wait(3000);  // 等待最多3秒
+}
+
 void PixmapProducer::append(const PixmapProducer::PixmapInfo &info)
 {
     condMtx.lock();
@@ -29,8 +36,12 @@ void PixmapProducer::append(const PixmapProducer::PixmapInfo &info)
 
 void PixmapProducer::stop()
 {
+    if (!isRunning())
+        return;
+        
     condMtx.lock();
     running = false;
+    infos.clear();  // 清空待处理队列
     condMtx.unlock();
 
     cond.wakeAll();
@@ -87,10 +98,8 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
 PreviewWidget::~PreviewWidget()
 {
-    qDebug() << "wait wallaper thread finish..";
-    worker->stop();
-    worker->wait(1000);
-    qInfo() << "wallaper thread is exited, release preview widget";
+    // worker 会在 QObject 树销毁时自动析构
+    // 不需要显式调用 stop 和 wait
 }
 
 void PreviewWidget::updateImage()
