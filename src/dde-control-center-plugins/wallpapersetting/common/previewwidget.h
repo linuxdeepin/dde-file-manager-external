@@ -23,6 +23,7 @@ public:
         qreal ratio;
     };
     explicit PixmapProducer(QObject *parent);
+    ~PixmapProducer();
     void append(const PixmapInfo &);
     void stop();
     void launch();
