@@ -10,6 +10,7 @@
 #include <QScreen>
 #include <QImageReader>
 #include <QPainter>
+#include "common/thumbnailcacheutils.h"            
 
 using namespace dfm_wallpapersetting;
 
@@ -81,21 +82,64 @@ void ScreensaverWorker::generateThumbnail(const QMap<QString, QString> &paths)
     const qreal ratio = qApp->primaryScreen()->devicePixelRatio();
     const int itemWidth = static_cast<int>(LISTVIEW_ICON_WIDTH * ratio);
     const int itemHeight = static_cast<int>(LISTVIEW_ICON_HEIGHT * ratio);
-    for (auto it = paths.begin(); it != paths.end(); ++it){
-        const QString realPath = it.value();
-        QImage image(realPath);
-        QPixmap pix = QPixmap::fromImage(image.scaled(QSize(itemWidth, itemHeight),
-                                                      Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
-        const QRect r(0, 0, itemWidth, itemHeight);
-        const QSize size(itemWidth, itemHeight);
+    const QSize size(itemWidth, itemHeight); // 目标缩略图尺寸
 
-        if (pix.width() > itemWidth || pix.height() > itemHeight)
+    for (auto it = paths.begin(); it != paths.end(); ++it) {
+        if (!running) // 检查是否需要提前终止
+            return;
+
+        const QString screensaverName = it.key();
+        const QString realPath = it.value(); // 原始封面图片路径
+
+        if (realPath.isEmpty()) {
+            qWarning() << "Skipping thumbnail generation for" << screensaverName << "due to empty path.";
+            continue;
+        }
+
+        QString cachePath = ThumbnailCacheUtils::getThumbnailCachePath(realPath, size);
+        QFileInfo cacheFile(cachePath);
+        QPixmap pix;
+
+        if (cacheFile.exists()) {
+            // 尝试从缓存加载
+            if (pix.load(cachePath)) {
+                pix.setDevicePixelRatio(ratio); // 设置DPI
+                emit pushThumbnail(screensaverName, pix);
+                continue; // 缓存命中，处理下一个
+            } else {
+                qWarning() << "Failed to load screensaver thumbnail from cache:" << cachePath;
+                // 缓存文件可能已损坏，尝试删除
+                QFile::remove(cachePath);
+            }
+        }
+
+        // --- 缓存未命中或加载失败，生成新的缩略图 ---
+
+        QImage image(realPath);
+        if (image.isNull()) {
+            qWarning() << "Failed to load screensaver cover image:" << realPath;
+            continue; // 加载失败，跳过此项
+        }
+
+        // 生成缩略图 (保持原有逻辑)
+        pix = QPixmap::fromImage(image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+        const QRect r(0, 0, itemWidth, itemHeight); // 使用 size 变量
+
+        if (pix.width() > itemWidth || pix.height() > itemHeight) {
             pix = pix.copy(QRect(pix.rect().center() - r.center(), size));
+        }
 
         if (!running)
             return;
 
-        emit pushThumbnail(it.key(), pix);
+        // 保存到缓存
+        if (!pix.save(cachePath, "PNG")) {
+            qWarning() << "Failed to save screensaver thumbnail to cache:" << cachePath;
+        }
+
+        // 设置DPI并发送信号
+        pix.setDevicePixelRatio(ratio);
+        emit pushThumbnail(screensaverName, pix);
     }
 }
 
