@@ -9,6 +9,7 @@
 #include <QScreen>
 #include <QImageReader>
 #include <QPainter>
+#include "common/thumbnailcacheutils.h"      
 
 using namespace dfm_wallpapersetting;
 
@@ -437,20 +438,42 @@ void InterfaceWorker::generateThumbnails(const QStringList &paths)
     const int itemWidth = static_cast<int>(LISTVIEW_ICON_WIDTH * ratio);
     const int itemHeight = static_cast<int>(LISTVIEW_ICON_HEIGHT * ratio);
     const QSize size(itemWidth, itemHeight);
-    for (const QString &path : paths){
+    for (const QString &path : paths) {
+        if (!running)
+            return;
+
+        QString cachePath = ThumbnailCacheUtils::getThumbnailCachePath(path, size);
+        QFileInfo cacheFile(cachePath);
+        QPixmap pix;
+        if (cacheFile.exists()) {
+            // 如果缓存存在，直接加载
+            if (pix.load(cachePath)) {
+                pix.setDevicePixelRatio(ratio);
+                emit pushThumbnail(path, true, QVariant::fromValue(pix));
+                continue; // 继续下一个
+            } else {
+                qWarning() << "Failed to load thumbnail from cache:" << cachePath;
+                // 缓存文件损坏,尝试删除
+                QFile::remove(cachePath);
+            }
+        }
+        // 如果缓存不存在，生成缩略图
         bool pic;
         QVariant val;
         if (generateThumbnail(path, size, pic, val)) {
             if (pic) {
-                auto pix = val.value<QPixmap>();
+                pix = val.value<QPixmap>();
                 pix.setDevicePixelRatio(ratio);
+                if (!pix.save(cachePath, "PNG")) {
+                   qWarning() << "Failed to save thumbnail to cache:" << cachePath;
+                }
                 emit pushThumbnail(path, true, QVariant::fromValue(pix));
+
             } else {
                 emit pushThumbnail(path, false, val);
             }
+        } else {
+            qWarning() << "Failed to generate thumbnail for path:" << path;
         }
-
-        if (!running)
-            return;
     }
 }
