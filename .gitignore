@@ -3,8 +3,23 @@ CMakeLists.txt.user
 
 
 build*
+release
 
 # vscode
 .vscode
 
 
+# debhelper-build-stamp
+.debhelper
+debian/files
+*.deb
+*.dsc
+*.build
+*.buildinfo
+*.changes
+*.tar.gz
+*.log
+*.substvars
+dcc-wallpapersetting-plugin
+
+obj-x86_64-linux-gnu
