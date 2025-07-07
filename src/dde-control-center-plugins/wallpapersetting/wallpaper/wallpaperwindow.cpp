@@ -119,7 +119,6 @@ void WallpaperWindow::reset(QString screen, int mode)
 
     currentScreen = screen;
     intervalCombox->reset(screen);
-    fillstylesCombox->reset(screen, mode);
     screenBox->setCurrentScreen(screen);
 
     // current wallpaper
@@ -144,7 +143,9 @@ void WallpaperWindow::reset(QString screen, int mode)
 
     qDebug() << "current wallpaper" << cur << isColor << mode;
 
-    modeBox->switchMode(isColor ? ModeButtonBox::SolidColor : ModeButtonBox::Picture);
+    auto currentMode = isColor ? ModeButtonBox::SolidColor : ModeButtonBox::Picture;
+    fillstylesCombox->reset(screen, currentMode);
+    modeBox->switchMode(currentMode);
 
     qDebug() << "wait wallpapers...";
     // wait 500ms for data
