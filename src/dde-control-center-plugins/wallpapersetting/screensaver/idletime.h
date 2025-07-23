@@ -22,6 +22,8 @@ public:
     static QVector<int> availableTime();
     static QString timeFormat(int second);
     static QStringList translateText(const QVector<int> &list);
+private:
+    bool getShowConfig();
 signals:
     int getCurrentIdle();
     void setCurrentIdle(int sec);
