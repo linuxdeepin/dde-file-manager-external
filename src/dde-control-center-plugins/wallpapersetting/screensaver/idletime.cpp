@@ -7,8 +7,16 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 
+#include <dtkcore_global.h>
+#include <dconfig.h>
+
+inline constexpr char kDefaultCfgPath[] { "org.deepin.screensaver" };
+static constexpr char kCfgAppId[] { "org.deepin.screensaver" };
+static constexpr char kCfgRequirePasswordShow[] { "control.center.requirePassword.show" };
+
 using namespace dfm_wallpapersetting;
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 using namespace dcc::widgets;
 
 IdleTime::IdleTime(QWidget *parent) : QWidget(parent)
@@ -30,12 +38,17 @@ IdleTime::IdleTime(QWidget *parent) : QWidget(parent)
     combox = new ComboxWidget(tr("Idle Time"));
     bgGpLayout->addWidget(combox);
 
-    pwdCheck = new QCheckBox(tr("Require a password on wakeup"), bkg);
-    pwdCheck->setFixedHeight(combox->height());
-    pwdCheck->setStyleSheet("QCheckBox { padding-left: 10px; }");
-    bgGpLayout->addWidget(pwdCheck);
+    if (getShowConfig()) {
+        pwdCheck = new QCheckBox(tr("Require a password on wakeup"), bkg);
+        pwdCheck->setFixedHeight(combox->height());
+        pwdCheck->setStyleSheet("QCheckBox { padding-left: 10px; }");
+        bgGpLayout->addWidget(pwdCheck);
 
-    connect(pwdCheck, &QCheckBox::clicked, this, &IdleTime::setIsLock);
+        connect(pwdCheck, &QCheckBox::clicked, this, &IdleTime::setIsLock);
+    } else {
+        emit setIsLock(false);
+    }
+
     connect(combox, &ComboxWidget::onIndexChanged, this, &IdleTime::setIdle);
 }
 
@@ -60,7 +73,8 @@ void IdleTime::reset()
     combox->setComboxOption(translateText(valueList));
     combox->setCurrentIndex(curIndex);
 
-    pwdCheck->setChecked(getIsLock());
+    if (pwdCheck)
+        pwdCheck->setChecked(getIsLock());
 }
 
 QVector<int> IdleTime::availableTime()
@@ -121,6 +135,17 @@ QStringList IdleTime::translateText(const QVector<int> &list)
     for (int v : list)
         ret.append(timeFormat(v));
     return ret;
+}
+
+bool IdleTime::getShowConfig()
+{
+    auto cfg = DConfig::create(kCfgAppId, kDefaultCfgPath, "", this);
+    if (!cfg) {
+        qWarning() << "connot create config, appid = " << kCfgAppId << ", path = " << kDefaultCfgPath;
+        return true;
+    }
+
+    return cfg->value(kCfgRequirePasswordShow, true).toBool();
 }
 
 void IdleTime::setIdle(int idx)
