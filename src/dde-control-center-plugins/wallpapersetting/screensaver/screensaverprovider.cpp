@@ -10,7 +10,7 @@
 #include <QScreen>
 #include <QImageReader>
 #include <QPainter>
-#include "common/thumbnailcacheutils.h"            
+#include "common/thumbnailcacheutils.h"
 
 using namespace dfm_wallpapersetting;
 
@@ -101,8 +101,10 @@ void ScreensaverWorker::generateThumbnail(const QMap<QString, QString> &paths)
         QPixmap pix;
 
         if (cacheFile.exists()) {
-            // 尝试从缓存加载
-            if (pix.load(cachePath)) {
+            // 尝试从缓存加载 - 使用 QImage 避免线程安全问题
+            QImage cacheImage;
+            if (cacheImage.load(cachePath)) {
+                pix = QPixmap::fromImage(cacheImage);
                 pix.setDevicePixelRatio(ratio); // 设置DPI
                 emit pushThumbnail(screensaverName, pix);
                 continue; // 缓存命中，处理下一个
@@ -121,21 +123,25 @@ void ScreensaverWorker::generateThumbnail(const QMap<QString, QString> &paths)
             continue; // 加载失败，跳过此项
         }
 
-        // 生成缩略图 (保持原有逻辑)
-        pix = QPixmap::fromImage(image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
-        const QRect r(0, 0, itemWidth, itemHeight); // 使用 size 变量
+        // 生成缩略图 - 在 QImage 层面进行操作避免线程安全问题
+        QImage scaledImage = image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 
-        if (pix.width() > itemWidth || pix.height() > itemHeight) {
-            pix = pix.copy(QRect(pix.rect().center() - r.center(), size));
+        // 如果需要裁剪
+        if (scaledImage.width() > itemWidth || scaledImage.height() > itemHeight) {
+            const QRect sourceRect(scaledImage.rect().center() - QRect(0, 0, itemWidth, itemHeight).center(), size);
+            scaledImage = scaledImage.copy(sourceRect);
         }
 
         if (!running)
             return;
 
-        // 保存到缓存
-        if (!pix.save(cachePath, "PNG")) {
+        // 保存到缓存 - 使用 QImage 保存避免线程安全问题
+        if (!scaledImage.save(cachePath, "PNG")) {
             qWarning() << "Failed to save screensaver thumbnail to cache:" << cachePath;
         }
+
+        // 转换为 QPixmap 并发送信号
+        pix = QPixmap::fromImage(scaledImage);
 
         // 设置DPI并发送信号
         pix.setDevicePixelRatio(ratio);
