@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,7 @@
 #include "screensaver/screensaverprovider.h"
 
 #include "screensaver/screensavercheck.h"
+#include "common/entrycheck.h"
 
 using namespace dfm_wallpapersetting;
 using namespace DCC_NAMESPACE;
@@ -67,7 +68,8 @@ QString ScreensaverSettingPlugin::path() const
 
 QString ScreensaverSettingPlugin::follow() const
 {
-    return "WallpaperSetting";
+    // 壁纸入口被管控隐藏时壁纸模块不会加载，插入点回退到 Dock，避免 follow 目标悬空
+    return ddplugin_desktop_util::wallpaperEntryVisible() ? "WallpaperSetting" : "Dock";
 }
 
 void ScreensaverSettingPlugin::addChildPageTrans() const

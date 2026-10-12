@@ -67,13 +67,15 @@ add_library(${SCREENSAVER_NAME} SHARED
 
 #set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../)
 
-target_include_directories(${SCREENSAVER_NAME} PRIVATE
-    ${QGSet_INCLUDE_DIRS}
-)
+foreach(_plugin ${WALLPAPER_NAME} ${SCREENSAVER_NAME})
+    target_include_directories(${_plugin} PRIVATE
+        ${QGSet_INCLUDE_DIRS}
+    )
 
-target_link_libraries(${SCREENSAVER_NAME} PRIVATE
-    ${QGSet_LIBRARIES}
-)
+    target_link_libraries(${_plugin} PRIVATE
+        ${QGSet_LIBRARIES}
+    )
+endforeach()
 
 file(GLOB TS_FILES "translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_FILES})
