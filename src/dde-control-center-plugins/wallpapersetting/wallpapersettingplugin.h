@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,6 +32,7 @@ public:
     QString translationPath() const override;
     QString path() const override;
     QString follow() const override;
+    bool enabled() const override;
     void addChildPageTrans() const override;
     QStringList availPage() const override;
     void showPage(const QString &pageName) override;

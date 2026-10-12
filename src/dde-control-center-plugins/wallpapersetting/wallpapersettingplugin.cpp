@@ -1,9 +1,10 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "wallpapersettingplugin.h"
 #include "wallpaper/wallpaperprovider.h"
+#include "common/entrycheck.h"
 
 using namespace dfm_wallpapersetting;
 using namespace DCC_NAMESPACE;
@@ -70,6 +71,11 @@ QString WallpaperSettingPlugin::path() const
 QString WallpaperSettingPlugin::follow() const
 {
     return "Dock";
+}
+
+bool WallpaperSettingPlugin::enabled() const
+{
+    return ddplugin_desktop_util::wallpaperEntryVisible();
 }
 
 void WallpaperSettingPlugin::addChildPageTrans() const
