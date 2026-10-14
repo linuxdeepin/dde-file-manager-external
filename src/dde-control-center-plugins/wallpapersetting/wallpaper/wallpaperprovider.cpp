@@ -9,6 +9,7 @@
 #include <QScreen>
 #include <QImageReader>
 #include <QPainter>
+#include <algorithm>
 #include "common/thumbnailcacheutils.h"      
 
 using namespace dfm_wallpapersetting;
@@ -335,6 +336,11 @@ QList<ItemNodePtr> InterfaceWorker::processListReply(const QString &reply)
                 result.append(ptr);
         }
     }
+
+    // Sort wallpapers: default (non-deletable) first, downloaded (deletable) after
+    std::stable_sort(result.begin(), result.end(), [](const ItemNodePtr &a, const ItemNodePtr &b) {
+        return a->deletable < b->deletable;
+    });
 
     return result;
 }
