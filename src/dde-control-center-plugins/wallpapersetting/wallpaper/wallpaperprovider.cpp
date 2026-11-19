@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,12 +9,88 @@
 #include <QScreen>
 #include <QImageReader>
 #include <QPainter>
+#include <QProcess>
+#include <QFile>
+#include <QSet>
 #include "common/thumbnailcacheutils.h"      
+
+#include <algorithm>
 
 using namespace dfm_wallpapersetting;
 
 #define APPEARANCE_SERVICE "com.deepin.daemon.Appearance"
 #define APPEARANCE_PATH "/com/deepin/daemon/Appearance"
+
+namespace {
+
+enum WallpaperGroup {
+    UserWallpaper = 0,     // added / copied by the user, Deletable is true
+    DownloadedWallpaper,   // installed by a store wallpaper package
+    DefaultWallpaper       // provided by the built-in wallpaper package
+};
+
+// Paths of the wallpapers which belong to the built-in wallpaper package.
+// Store wallpapers are installed as separate deb packages into the very same
+// directories, and the appearance service reports both of them with
+// Deletable=false, so the only reliable way to tell them apart is the package
+// they come from. An empty set means the information is unavailable and only
+// the Deletable flag can be used for grouping.
+const QSet<QString> &defaultWallpaperFiles()
+{
+    static const QSet<QString> result = [] {
+        QSet<QString> files;
+        const QStringList probeFiles = {
+            QStringLiteral("/usr/share/backgrounds/default_background.jpg"),
+            QStringLiteral("/usr/share/wallpapers/deepin/desktop.jpg")
+        };
+
+        QString package;
+        for (const QString &probe : probeFiles) {
+            QProcess proc;
+            proc.start(QStringLiteral("dpkg-query"), { QStringLiteral("-S"), probe });
+            if (!proc.waitForFinished(3000) || proc.exitCode() != 0)
+                continue;
+
+            const QString output = QString::fromLocal8Bit(proc.readAllStandardOutput()).trimmed();
+            const QString name = output.section(QLatin1Char(':'), 0, 0).trimmed();
+            if (!name.isEmpty() && QFile::exists(QStringLiteral("/var/lib/dpkg/info/%1.list").arg(name))) {
+                package = name;
+                break;
+            }
+        }
+
+        if (package.isEmpty())
+            return files;
+
+        QFile listFile(QStringLiteral("/var/lib/dpkg/info/%1.list").arg(package));
+        if (!listFile.open(QIODevice::ReadOnly | QIODevice::Text))
+            return files;
+
+        const QList<QByteArray> lines = listFile.readAll().split('\n');
+        for (const QByteArray &line : lines) {
+            const QString path = QString::fromUtf8(line).trimmed();
+            if (path.startsWith(QStringLiteral("/usr/share/wallpapers/")))
+                files.insert(path);
+        }
+
+        return files;
+    }();
+
+    return result;
+}
+
+WallpaperGroup wallpaperGroupOf(const ItemNodePtr &node, const QSet<QString> &defaultFiles)
+{
+    if (node->deletable)
+        return UserWallpaper;
+
+    if (defaultFiles.isEmpty() || defaultFiles.contains(node->item))
+        return DefaultWallpaper;
+
+    return DownloadedWallpaper;
+}
+
+}   // namespace
 
 static inline QString covertUrlToLocalPath(const QString &url)
 {
@@ -390,6 +466,20 @@ void InterfaceWorker::onListBackground()
         QDBusReply<QString> reply = call.reply();
         QString value = reply.value();
         result = processListReply(value);
+
+        // Group the wallpapers as user / downloaded / default, and keep the
+        // order given by the appearance service inside each group. The service
+        // only orders the list by two parts (custom wallpapers, then every
+        // wallpaper found in the system directories), so store wallpapers are
+        // mixed with the built-in ones there. File timestamps are not usable
+        // for the grouping: the deb packages normalize the modification time
+        // and the change time is refreshed whenever a wallpaper package is
+        // reinstalled or upgraded.
+        const QSet<QString> &defaultFiles = defaultWallpaperFiles();
+        std::stable_sort(result.begin(), result.end(),
+                         [&defaultFiles](const ItemNodePtr &a, const ItemNodePtr &b) {
+                             return wallpaperGroupOf(a, defaultFiles) < wallpaperGroupOf(b, defaultFiles);
+                         });
     }
 
     if (running) {
